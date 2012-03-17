@@ -1,11 +1,9 @@
 ﻿@model IEnumerable<Glossary.Models.GlossaryTerm>
-
 @{
     ViewBag.Title = "Index";
 }
-
-<h2>Index</h2>
-
+<h2>
+    Index</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -17,23 +15,23 @@
         <th>
             Definition
         </th>
-        <th></th>
+        <th>
+        </th>
     </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td class="term">
-            @Html.DisplayFor(modelItem => item.Term)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Definition)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.GlossaryTermID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.GlossaryTermID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.GlossaryTermID })
-        </td>
-    </tr>
-}
-
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="term">
+                @Html.DisplayFor(modelItem => item.Term)
+            </td>
+            <td class="definition">
+                @Html.DisplayFor(modelItem => item.Definition)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.GlossaryTermID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.GlossaryTermID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.GlossaryTermID })
+            </td>
+        </tr>
+    }
 </table>

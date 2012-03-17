@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Net;
 using OpenQA.Selenium;
 
 namespace Glossary.Tests.EndToEndTests
@@ -30,12 +29,14 @@ namespace Glossary.Tests.EndToEndTests
             foreach(var driver in WebDrivers)
             {
                 driver.Navigate().GoToUrl(GetAbsoluteUrl("/"));
+                
                 var terms = driver.FindElements(By.ClassName("term"));
-
-                Assert.IsTrue(terms.Count > 0);
-
                 Assert.AreEqual("abyssal plain", terms[0].Text);
-                Assert.AreEqual("accrete", terms[1].Text); 
+                Assert.AreEqual("accrete", terms[1].Text);
+
+                var definitions = driver.FindElements(By.ClassName("definition"));
+                Assert.AreEqual("The ocean floor offshore from the continental margin, usually very flat with a slight slope.", definitions[0].Text);
+                Assert.AreEqual("v. To add terranes (small land masses or pieces of crust) to another, usually larger, land mass.", definitions[1].Text);
             }
         }
     }
