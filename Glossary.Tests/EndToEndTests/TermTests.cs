@@ -9,7 +9,7 @@ namespace Glossary.Tests.EndToEndTests
         public TermTests() : base("Glossary") { }
  
         [TestMethod]
-        public void TestMethod1() {
+        public void SanityCheck() {
             var client = new WebClient();
             var result = client.DownloadString(GetAbsoluteUrl("/home/index"));
             StringAssert.Contains(result, "MVC");
