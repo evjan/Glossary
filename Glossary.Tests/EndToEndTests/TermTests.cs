@@ -35,8 +35,6 @@ namespace Glossary.Tests.EndToEndTests
                 var termsMatchingNewName = allTerms.Where(termElement => termElement.Text == "Test-term");
 
                 Assert.AreEqual(1, termsMatchingNewName.Count());
-
-                //Remove after
             }
         }
 
@@ -45,9 +43,31 @@ namespace Glossary.Tests.EndToEndTests
         {
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void As_a_glossary_author_I_would_like_to_remove_terms_that_I_no_longer_feel_are_necessary_or_valid()
         {
+            foreach (var driver in WebDrivers)
+            {
+                driver.Navigate().GoToUrl(GetAbsoluteUrl("/"));
+
+                var allTermsBefore = driver.FindElements(By.ClassName("term"));
+                int numberOfTermsBefore = allTermsBefore.Count;
+                var nameOfElementToBeDeleted = allTermsBefore.First().Text;
+
+                driver.FindElement(By.ClassName("deleteTerm")).Click();
+
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                wait.Until(d => d.FindElement(By.XPath("//input[@value='Delete']")));
+
+                driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+                wait.Until(d => d.FindElement(By.ClassName("term")));
+
+                var allTermsAfter = driver.FindElements(By.ClassName("term"));
+                int numberOfTermsAfter = allTermsAfter.Count;
+
+                Assert.AreEqual(numberOfTermsBefore - 1, numberOfTermsAfter);
+                Assert.AreEqual(0, allTermsAfter.Count(t => t.Text == nameOfElementToBeDeleted));
+            }
         }
 
         [TestMethod]

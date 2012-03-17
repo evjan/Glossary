@@ -30,7 +30,7 @@
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.GlossaryTermID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.GlossaryTermID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.GlossaryTermID })
+                @Html.ActionLink("Delete", "Delete", new { id = item.GlossaryTermID }, new { @class = "deleteTerm"})
             </td>
         </tr>
     }

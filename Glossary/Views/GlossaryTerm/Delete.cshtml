@@ -1,28 +1,29 @@
 ﻿@model Glossary.Models.GlossaryTerm
-
 @{
     ViewBag.Title = "Delete";
 }
-
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+<h2>
+    Delete</h2>
+<h3>
+    Are you sure you want to delete this?</h3>
 <fieldset>
     <legend>GlossaryTerm</legend>
-
-    <div class="display-label">Term</div>
+    <div class="display-label">
+        Term</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Term)
     </div>
-
-    <div class="display-label">Definition</div>
+    <div class="display-label">
+        Definition</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Definition)
     </div>
 </fieldset>
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     <p>
-        <input type="submit" value="Delete" /> |
+        <input type="submit" value="Delete" />
+        |
         @Html.ActionLink("Back to List", "Index")
     </p>
 }
