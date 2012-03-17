@@ -8,7 +8,6 @@ namespace Glossary.Controllers
 { 
     public class GlossaryTermController : Controller
     {
-        readonly GlossaryContext _db = new GlossaryContext();
         IGlossaryTermRepository _repository;
 
         public GlossaryTermController() : this(new GlossaryTermRepository())
@@ -33,8 +32,7 @@ namespace Glossary.Controllers
 
         public ViewResult Details(int id)
         {
-            GlossaryTerm glossaryterm = _db.GlossaryTerms.Find(id);
-            return View(glossaryterm);
+            return View(_repository.Get(id));
         }
 
         //
@@ -53,8 +51,7 @@ namespace Glossary.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.GlossaryTerms.Add(glossaryterm);
-                _db.SaveChanges();
+                _repository.Create(glossaryterm);
                 return RedirectToAction("Index");  
             }
 
@@ -66,8 +63,7 @@ namespace Glossary.Controllers
  
         public ActionResult Edit(int id)
         {
-            GlossaryTerm glossaryterm = _db.GlossaryTerms.Find(id);
-            return View(glossaryterm);
+            return View(_repository.Get(id));
         }
 
         //
@@ -78,8 +74,7 @@ namespace Glossary.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(glossaryterm).State = EntityState.Modified;
-                _db.SaveChanges();
+                _repository.Edit(glossaryterm);
                 return RedirectToAction("Index");
             }
             return View(glossaryterm);
@@ -90,8 +85,7 @@ namespace Glossary.Controllers
  
         public ActionResult Delete(int id)
         {
-            GlossaryTerm glossaryterm = _db.GlossaryTerms.Find(id);
-            return View(glossaryterm);
+            return View(_repository.Get(id));
         }
 
         //
@@ -100,16 +94,9 @@ namespace Glossary.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {            
-            GlossaryTerm glossaryterm = _db.GlossaryTerms.Find(id);
-            _db.GlossaryTerms.Remove(glossaryterm);
-            _db.SaveChanges();
+            GlossaryTerm glossaryterm = _repository.Get(id);
+            _repository.Delete(glossaryterm);
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            _db.Dispose();
-            base.Dispose(disposing);
         }
     }
 }
