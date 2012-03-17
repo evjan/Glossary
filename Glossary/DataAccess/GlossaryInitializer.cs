@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using Glossary.Models;
 
-namespace Glossary.DatabaseContexts
+namespace Glossary.DataAccess
 {
     public class GlossaryInitializer : DropCreateDatabaseIfModelChanges<GlossaryContext>
     {

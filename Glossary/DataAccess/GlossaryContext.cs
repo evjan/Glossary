@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using Glossary.Models;
 
-namespace Glossary.DatabaseContexts
+namespace Glossary.DataAccess
 {
     public class GlossaryContext : DbContext
     {

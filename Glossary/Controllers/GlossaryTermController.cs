@@ -1,21 +1,31 @@
 ﻿using System.Data;
 using System.Linq;
 using System.Web.Mvc;
+using Glossary.DataAccess;
 using Glossary.Models;
-using Glossary.DatabaseContexts;
 
 namespace Glossary.Controllers
 { 
     public class GlossaryTermController : Controller
     {
-        private readonly GlossaryContext _db = new GlossaryContext();
+        readonly GlossaryContext _db = new GlossaryContext();
+        IGlossaryTermRepository _repository;
+
+        public GlossaryTermController() : this(new GlossaryTermRepository())
+        {
+        }
+
+        public GlossaryTermController(IGlossaryTermRepository repository)
+        {
+            _repository = repository;
+        }
 
         //
         // GET: /GlossaryTerm/
 
         public ViewResult Index()
         {
-            return View(_db.GlossaryTerms.OrderBy(gt => gt.Term).ToList());
+            return View(_repository.GetAll().OrderBy(gt => gt.Term));
         }
 
         //

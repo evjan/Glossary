@@ -64,8 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\GlossaryTermController.cs" />
-    <Compile Include="DatabaseContexts\GlossaryContext.cs" />
-    <Compile Include="DatabaseContexts\GlossaryInitializer.cs" />
+    <Compile Include="DataAccess\GlossaryContext.cs" />
+    <Compile Include="DataAccess\GlossaryInitializer.cs" />
+    <Compile Include="DataAccess\GlossaryTermRepository.cs" />
+    <Compile Include="DataAccess\IGlossaryTermRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

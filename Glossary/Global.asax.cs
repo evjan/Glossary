@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Glossary.DatabaseContexts;
+using Glossary.DataAccess;
 
 namespace Glossary
 {
