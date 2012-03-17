@@ -38,9 +38,29 @@ namespace Glossary.Tests.EndToEndTests
             }
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void As_a_glossary_author_I_would_like_to_edit_a_term_so_I_can_fix_mistakes_and_update_definitions()
         {
+            foreach (var driver in WebDrivers)
+            {
+                driver.Navigate().GoToUrl(GetAbsoluteUrl("/"));
+
+                driver.FindElement(By.ClassName("editTerm")).Click();
+
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                wait.Until(d => d.FindElement(By.Id("Term")));
+
+                var termTextBox = driver.FindElement(By.Id("Term"));
+                termTextBox.Clear();
+                termTextBox.SendKeys("Updated-term");
+                
+                driver.FindElement(By.XPath("//input[@value='Save']")).Click();
+                wait.Until(d => d.FindElement(By.ClassName("term")));
+
+                var allTerms = driver.FindElements(By.ClassName("term"));
+
+                Assert.AreEqual(1, allTerms.Count(t => t.Text == "Updated-term"));
+            }
         }
 
         [TestMethod]
