@@ -146,9 +146,6 @@
     <Content Include="Views\GlossaryTerm\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\GlossaryTerm\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\GlossaryTerm\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
