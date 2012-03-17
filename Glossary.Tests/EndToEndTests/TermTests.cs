@@ -36,8 +36,7 @@ namespace Glossary.Tests.EndToEndTests
 
                 Assert.AreEqual(1, termsMatchingNewName.Count());
 
-                //Make sure it does not stay in database
-                //Create test for making sure duplicate terms are not accepted
+                //Remove after
             }
         }
 

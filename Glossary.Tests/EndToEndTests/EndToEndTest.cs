@@ -31,8 +31,10 @@ namespace Glossary.Tests.EndToEndTests
  
             // Start Selenium drivers
             WebDrivers = new List<IWebDriver> {new FirefoxDriver()};
+
+            CreateBackupOfDatabase();
         }
- 
+
         [TestCleanup]
         public void TestCleanup() {
             // Ensure IISExpress is stopped
@@ -44,8 +46,30 @@ namespace Glossary.Tests.EndToEndTests
             {
                 webDriver.Quit();
             }
+
+            RestoreBackupOfDatabase();
         }
- 
+
+        private void CreateBackupOfDatabase()
+        {
+            var databasePath = GetDatabasePath();
+            File.Copy(databasePath + "\\Glossary.sdf", databasePath + "\\Glossary.sdf.bak");
+        }
+
+        private void RestoreBackupOfDatabase()
+        {
+            var databasePath = GetDatabasePath();
+            File.Delete(databasePath + "\\Glossary.sdf");
+            File.Move(databasePath + "\\Glossary.sdf.bak", databasePath + "\\Glossary.sdf");
+        }
+
+        private string GetDatabasePath()
+        {
+            var applicationPath = GetApplicationPath(_applicationName);
+            var databasePath = applicationPath + "\\App_Data";
+            return databasePath;
+        }
+
         private void StartIIS() {
             var applicationPath = GetApplicationPath(_applicationName);
             var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
