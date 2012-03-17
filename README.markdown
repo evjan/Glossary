@@ -15,5 +15,4 @@ Example
 
 License
 =======
-
-Microsoft Public License (Ms-PL)
+MIT
