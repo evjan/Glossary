@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Web.Mvc;
 using Glossary.Controllers;
 using Glossary.DataAccess;
 using Glossary.Models;
@@ -65,14 +66,13 @@ namespace Glossary.Tests.Controllers
         }
 
         [TestMethod, TestCategory("Unit")]
-        public void Edit_should_display_error_message_if_term_is_too_long()
+        public void Edit_should_display_error_message_if_there_is_a_data_exception()
         {
             var repositoryStub = MockRepository.GenerateStub<IGlossaryTermRepository>();
             
             var glossaryTermCausingError = new GlossaryTerm();
 
-            const string errorMessage = "Error message!";
-            repositoryStub.Expect(m => m.Edit(glossaryTermCausingError)).IgnoreArguments().Throw(new DataException(errorMessage));
+            repositoryStub.Expect(m => m.Edit(glossaryTermCausingError)).Throw(new DataException(""));
 
             var controller = new GlossaryTermController(repositoryStub);
             controller.Edit(glossaryTermCausingError);
@@ -82,19 +82,31 @@ namespace Glossary.Tests.Controllers
         }
 
         [TestMethod, TestCategory("Unit")]
-        public void Create_should_display_error_message_if_term_is_too_long()
+        public void Create_should_display_error_message_if_there_is_a_data_exception()
         {
             var repositoryStub = MockRepository.GenerateStub<IGlossaryTermRepository>();
 
             var glossaryTermCausingError = new GlossaryTerm();
 
-            const string errorMessage = "Error message!";
-            repositoryStub.Expect(m => m.Create(glossaryTermCausingError)).IgnoreArguments().Throw(new DataException(errorMessage));
+            repositoryStub.Expect(m => m.Create(glossaryTermCausingError)).Throw(new DataException(""));
 
             var controller = new GlossaryTermController(repositoryStub);
             controller.Create(glossaryTermCausingError);
 
             Assert.AreEqual("The term could not be saved. Please try again.", controller.ModelState[""].Errors.First().ErrorMessage);
+        }
+
+        [TestMethod, TestCategory("Unit")]
+        public void Delete_should_stay_on_same_page_if_there_is_a_data_exception()
+        {
+            var repositoryStub = MockRepository.GenerateStub<IGlossaryTermRepository>();
+
+            repositoryStub.Expect(m => m.Delete(null)).IgnoreArguments().Throw(new DataException());
+
+            var controller = new GlossaryTermController(repositoryStub);
+            var result = (RedirectToRouteResult) controller.DeleteConfirmed(1);
+            
+            Assert.AreEqual("Delete", result.RouteValues["action"]);
         }
     }
 }

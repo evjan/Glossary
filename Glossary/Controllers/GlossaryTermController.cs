@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Glossary.DataAccess;
 using Glossary.Models;
 
@@ -93,8 +94,13 @@ namespace Glossary.Controllers
         //
         // GET: /GlossaryTerm/Delete/5
 
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, bool? saveChangesError)
         {
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Delete of the glossary term failed. Try again.";
+            }
+
             return View(_repository.Get(id));
         }
 
@@ -104,8 +110,22 @@ namespace Glossary.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
-            GlossaryTerm glossaryterm = _repository.Get(id);
-            _repository.Delete(glossaryterm);
+            try
+            {
+                GlossaryTerm glossaryterm = _repository.Get(id);
+                _repository.Delete(glossaryterm);
+
+            }
+            catch (DataException)
+            {
+                return RedirectToAction("Delete",
+                    new RouteValueDictionary
+                        {
+                            { "id", id }, 
+                            { "saveChangesError", true }
+                        });
+            }
+
             return RedirectToAction("Index");
         }
     }
