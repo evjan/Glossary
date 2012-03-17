@@ -1,5 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Glossary.Tests.EndToEndTests
 {
@@ -8,9 +12,33 @@ namespace Glossary.Tests.EndToEndTests
     {
         public TermTests() : base("Glossary") { }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void As_a_glossary_author_I_would_like_to_add_a_term_and_definition_to_the_system_so_I_can_continually_grow_our_knowledge_base_of_terms()
         {
+            foreach(var driver in WebDrivers)
+            {
+                driver.Navigate().GoToUrl(GetAbsoluteUrl("/"));
+
+                driver.FindElement(By.LinkText("Create New")).Click();
+
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                wait.Until(d => d.FindElement(By.Id("Term")));
+                
+                driver.FindElement(By.Id("Term")).SendKeys("Test-term");
+                driver.FindElement(By.Id("Definition")).SendKeys("Test definition entered by automated test. Should be automatically removed after each test run.");
+
+                driver.FindElement(By.Id("Create")).Click();
+                wait.Until(d => d.FindElement(By.ClassName("term")));
+
+                var allTerms = driver.FindElements(By.ClassName("term"));
+                
+                var termsMatchingNewName = allTerms.Where(termElement => termElement.Text == "Test-term");
+
+                Assert.AreEqual(1, termsMatchingNewName.Count());
+
+                //Make sure it does not stay in database
+                //Create test for making sure duplicate terms are not accepted
+            }
         }
 
         [TestMethod, Ignore]
