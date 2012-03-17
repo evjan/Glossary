@@ -15,7 +15,7 @@ namespace Glossary.Controllers
 
         public ViewResult Index()
         {
-            return View(_db.GlossaryTerms.ToList());
+            return View(_db.GlossaryTerms.OrderBy(gt => gt.Term).ToList());
         }
 
         //
