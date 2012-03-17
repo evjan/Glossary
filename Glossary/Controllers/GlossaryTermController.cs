@@ -1,16 +1,19 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web.Mvc;
 using Glossary.DataAccess;
 using Glossary.Models;
 
 namespace Glossary.Controllers
-{ 
+{
     public class GlossaryTermController : Controller
     {
         IGlossaryTermRepository _repository;
 
-        public GlossaryTermController() : this(new GlossaryTermRepository())
+        public GlossaryTermController()
+            : this(new GlossaryTermRepository())
         {
         }
 
@@ -28,20 +31,12 @@ namespace Glossary.Controllers
         }
 
         //
-        // GET: /GlossaryTerm/Details/5
-
-        public ViewResult Details(int id)
-        {
-            return View(_repository.Get(id));
-        }
-
-        //
         // GET: /GlossaryTerm/Create
 
         public ActionResult Create()
         {
             return View();
-        } 
+        }
 
         //
         // POST: /GlossaryTerm/Create
@@ -51,16 +46,23 @@ namespace Glossary.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.Create(glossaryterm);
-                return RedirectToAction("Index");  
+                try
+                {
+                    _repository.Create(glossaryterm);
+                    return RedirectToAction("Index");
+                }
+                catch (DataException)
+                {
+                    ModelState.AddModelError("", "The term could not be saved. Please try again.");
+                }
             }
 
             return View(glossaryterm);
         }
-        
+
         //
         // GET: /GlossaryTerm/Edit/5
- 
+
         public ActionResult Edit(int id)
         {
             return View(_repository.Get(id));
@@ -74,15 +76,23 @@ namespace Glossary.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.Edit(glossaryterm);
-                return RedirectToAction("Index");
+                try
+                {
+                    _repository.Edit(glossaryterm);
+                    return RedirectToAction("Index");
+                }
+                catch (DataException)
+                {
+                    ModelState.AddModelError("", "Changes could not be saved. Please try again.");
+                }
+
             }
             return View(glossaryterm);
         }
 
         //
         // GET: /GlossaryTerm/Delete/5
- 
+
         public ActionResult Delete(int id)
         {
             return View(_repository.Get(id));
@@ -93,7 +103,7 @@ namespace Glossary.Controllers
 
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
-        {            
+        {
             GlossaryTerm glossaryterm = _repository.Get(id);
             _repository.Delete(glossaryterm);
             return RedirectToAction("Index");

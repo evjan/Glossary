@@ -12,7 +12,7 @@ namespace Glossary.Tests.EndToEndTests
     {
         public TermTests() : base("Glossary") { }
 
-        [TestMethod]
+        [TestMethod, TestCategory("EndToEnd")]
         public void As_a_glossary_author_I_would_like_to_add_a_term_and_definition_to_the_system_so_I_can_continually_grow_our_knowledge_base_of_terms()
         {
             foreach(var driver in WebDrivers)
@@ -38,7 +38,7 @@ namespace Glossary.Tests.EndToEndTests
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("EndToEnd")]
         public void As_a_glossary_author_I_would_like_to_edit_a_term_so_I_can_fix_mistakes_and_update_definitions()
         {
             foreach (var driver in WebDrivers)
@@ -63,7 +63,7 @@ namespace Glossary.Tests.EndToEndTests
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("EndToEnd")]
         public void As_a_glossary_author_I_would_like_to_remove_terms_that_I_no_longer_feel_are_necessary_or_valid()
         {
             foreach (var driver in WebDrivers)
@@ -90,7 +90,7 @@ namespace Glossary.Tests.EndToEndTests
             }
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("EndToEnd")]
         public void As_a_glossary_author_I_would_like_to_view_the_alphabetically_sorted_list_of_terms_and_definitions_so_I_can_find_a_particular_term_quickly()
         {
             foreach(var driver in WebDrivers)
