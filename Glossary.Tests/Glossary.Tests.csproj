@@ -62,7 +62,7 @@
     <Compile Include="EndToEndTests\EndToEndTest.cs" />
     <Compile Include="EndToEndTests\TermTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="Controllers\GlossaryTermControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
