@@ -4,9 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.IO;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.IE;
 
 namespace Glossary.Tests.EndToEndTests
 {
@@ -14,6 +12,10 @@ namespace Glossary.Tests.EndToEndTests
     public abstract class EndToEndTest
     {
         const int IISPort = 2020;
+        
+        private const string DataBaseFileName = "Glossary.sdf";
+        private const string DataBaseFileNameBackupEnding = "bak";
+
         private readonly string _applicationName;
         private Process _iisProcess;
 
@@ -26,41 +28,50 @@ namespace Glossary.Tests.EndToEndTests
  
         [TestInitialize]
         public void TestInitialize() {
-            // Start IISExpress
             StartIIS();
- 
-            // Start Selenium drivers
-            WebDrivers = new List<IWebDriver> {new FirefoxDriver()};
-
-            CreateBackupOfDatabase();
+            StartAllWebDrivers();
+            CreateBackupOfDatabase(DataBaseFileName, DataBaseFileNameBackupEnding);
         }
 
         [TestCleanup]
         public void TestCleanup() {
-            // Ensure IISExpress is stopped
-            if (_iisProcess.HasExited == false) {
-                _iisProcess.Kill();
-            }
- 
-            foreach(var webDriver in WebDrivers)
+            StopIIS();
+            QuitAllWebDrivers();
+            RestoreBackupOfDatabase(DataBaseFileName, DataBaseFileNameBackupEnding);
+        }
+
+        private void StartAllWebDrivers()
+        {
+            WebDrivers = new List<IWebDriver> { new FirefoxDriver() };
+        }
+
+        private void QuitAllWebDrivers()
+        {
+            foreach (var webDriver in WebDrivers)
             {
                 webDriver.Quit();
             }
-
-            RestoreBackupOfDatabase();
         }
 
-        private void CreateBackupOfDatabase()
+        private void StopIIS()
         {
-            var databasePath = GetDatabasePath();
-            File.Copy(databasePath + "\\Glossary.sdf", databasePath + "\\Glossary.sdf.bak");
+            if (_iisProcess.HasExited == false)
+            {
+                _iisProcess.Kill();
+            }
         }
 
-        private void RestoreBackupOfDatabase()
+        private void CreateBackupOfDatabase(string databaseFileName, string databaseFileNameBackupEnding)
         {
             var databasePath = GetDatabasePath();
-            File.Delete(databasePath + "\\Glossary.sdf");
-            File.Move(databasePath + "\\Glossary.sdf.bak", databasePath + "\\Glossary.sdf");
+            File.Copy(databasePath + "\\" + databaseFileName, databasePath + "\\" + databaseFileName + "." + databaseFileNameBackupEnding);
+        }
+
+        private void RestoreBackupOfDatabase(string databaseFileName, string databaseFileNameBackupEnding)
+        {
+            var databasePath = GetDatabasePath();
+            File.Delete(databasePath + "\\" + databaseFileName);
+            File.Move(databasePath + "\\" + databaseFileName + "." + databaseFileNameBackupEnding, databasePath + "\\" + databaseFileName);
         }
 
         private string GetDatabasePath()
@@ -87,6 +98,10 @@ namespace Glossary.Tests.EndToEndTests
  
         protected virtual string GetApplicationPath(string applicationName) {
             var solutionFolder = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)));
+            
+            if(solutionFolder == null)
+                throw new Exception("Solution folder for application not found.");
+
             return Path.Combine(solutionFolder, applicationName);
         }
  
