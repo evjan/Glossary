@@ -1,0 +1,25 @@
+﻿@model Glossary.Models.GlossaryTerm
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>GlossaryTerm</legend>
+
+    <div class="display-label">Term</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Term)
+    </div>
+
+    <div class="display-label">Definition</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Definition)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.GlossaryTermID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
